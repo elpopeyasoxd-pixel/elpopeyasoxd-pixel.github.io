@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario LDAP y Administración Linux</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .question {
+            background: #f8f9fa;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+            transition: transform 0.2s;
+        }
+        
+        .question:hover {
+            transform: translateX(5px);
+        }
+        
+        .question-text {
+            font-weight: bold;
+            font-size: 1.15em;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .option input[type="radio"] {
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .option label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 1.05em;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+        
+        .result {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            background: #f0f4ff;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        .result h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 2em;
+        }
+        
+        .result p {
+            font-size: 1.3em;
+            color: #333;
+        }
+        
+        .correct {
+            background: #d4edda !important;
+            border-color: #28a745 !important;
+        }
+        
+        .incorrect {
+            background: #f8d7da !important;
+            border-color: #dc3545 !important;
+        }
+        
+        .correct-answer {
+            background: #d1ecf1 !important;
+            border-color: #17a2b8 !important;
+        }
+        
+        .score-excellent {
+            color: #28a745;
+        }
+        
+        .score-good {
+            color: #17a2b8;
+        }
+        
+        .score-fair {
+            color: #ffc107;
+        }
+        
+        .score-poor {
+            color: #dc3545;
+        }
+        
+        .text-input {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 1.05em;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            margin-top: 10px;
+            transition: all 0.3s;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .text-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+        
+        .feedback {
+            display: none;
+            margin-top: 8px;
+            font-weight: bold;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖥️ Cuestionario Técnico</h1>
+        <p class="subtitle">LDAP, APT y Administración de Linux - Nivel Avanzado</p>
+        
+        <form id="quizForm">
+            <!-- Pregunta 1 -->
+            <div class="question">
+                <div class="question-text">1. ¿Qué comando se utiliza para instalar un paquete usando la herramienta apt?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q1" value="b" id="q1b">
+                        <label for="q1b">apt purge paquete</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" value="a" id="q1a">
+                        <label for="q1a">apt install paquete</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" value="c" id="q1c">
+                        <label for="q1c">apt remove paquete</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q1" value="d" id="q1d">
+                        <label for="q1d">apt clean</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 2 -->
+            <div class="question">
+                <div class="question-text">2. ¿Cuál es la principal diferencia entre apt remove y apt purge?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q2" value="a" id="q2a">
+                        <label for="q2a">Remove elimina el paquete completamente, purge solo lo desactiva</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q2" value="b" id="q2b">
+                        <label for="q2b">Remove mantiene los archivos de configuración, purge los elimina por completo</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q2" value="c" id="q2c">
+                        <label for="q2c">Purge crea una copia de seguridad antes de eliminar</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q2" value="d" id="q2d">
+                        <label for="q2d">No existe diferencia funcional entre ambos comandos</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 3 -->
+            <div class="question">
+                <div class="question-text">3. Al ejecutar sudo sin la opción -u, ¿como qué usuario se ejecutan los comandos?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q3" value="a" id="q3a">
+                        <label for="q3a">Como el usuario root</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q3" value="b" id="q3b">
+                        <label for="q3b">Como un usuario que no es root</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q3" value="c" id="q3c">
+                        <label for="q3c">Como otro usuario cualquiera del sistema</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q3" value="d" id="q3d">
+                        <label for="q3d">Como otro usuario configurado en /etc/sudoers</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 4 -->
+            <div class="question">
+                <div class="question-text">4. ¿Qué tipo de archivo se emplea en la creación de entradas de directorio en LDAP?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q4" value="a" id="q4a">
+                        <label for="q4a">Se utiliza .conf</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q4" value="b" id="q4b">
+                        <label for="q4b">Se utiliza .ldif</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q4" value="c" id="q4c">
+                        <label for="q4c">Se utiliza .xml</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q4" value="d" id="q4d">
+                        <label for="q4d">Se utiliza .db</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 5 -->
+            <div class="question">
+                <div class="question-text">5. ¿Qué comando se utiliza para buscar entradas en un directorio LDAP?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q5" value="a" id="q5a">
+                        <label for="q5a">ldapdelete</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q5" value="b" id="q5b">
+                        <label for="q5b">ldapmodify</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q5" value="c" id="q5c">
+                        <label for="q5c">slapcat</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q5" value="d" id="q5d">
+                        <label for="q5d">ldapsearch</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 6 -->
+            <div class="question">
+                <div class="question-text">6. ¿Para qué sirve el comando ldapdelete?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q6" value="a" id="q6a">
+                        <label for="q6a">Para agregar una nueva entrada al directorio</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q6" value="b" id="q6b">
+                        <label for="q6b">Para eliminar una entrada del directorio</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q6" value="c" id="q6c">
+                        <label for="q6c">Para hacer una copia de seguridad de la base de datos</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q6" value="d" id="q6d">
+                        <label for="q6d">Para modificar un usuario en el directorio LDAP</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 7 -->
+            <div class="question">
+                <div class="question-text">7. Si elimino un archivo LDIF después de haber agregado sus datos a la base de datos LDAP, ¿se eliminan también los datos del directorio?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q7" value="a" id="q7a">
+                        <label for="q7a">Sí, se eliminan automáticamente</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q7" value="b" id="q7b">
+                        <label for="q7b">No, las entradas permanecen en la base de datos</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q7" value="c" id="q7c">
+                        <label for="q7c">Sí, pero solo si usas ldapdelete primero</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q7" value="d" id="q7d">
+                        <label for="q7d">Depende de los permisos del archivo</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 8 -->
+            <div class="question">
+                <div class="question-text">8. ¿Qué comando permite volcar toda la base de datos de OpenLDAP en un archivo LDIF?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q8" value="a" id="q8a">
+                        <label for="q8a">ldapmodify</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q8" value="b" id="q8b">
+                        <label for="q8b">slapadd</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q8" value="c" id="q8c">
+                        <label for="q8c">ldapsearch</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q8" value="d" id="q8d">
+                        <label for="q8d">slapcat</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 9 -->
+            <div class="question">
+                <div class="question-text">9. ¿Qué comando muestra información de usuarios del sistema desde /etc/passwd o LDAP?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q9" value="a" id="q9a">
+                        <label for="q9a">ldapsearch</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q9" value="b" id="q9b">
+                        <label for="q9b">cat /etc/passwd</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q9" value="c" id="q9c">
+                        <label for="q9c">getent passwd</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q9" value="d" id="q9d">
+                        <label for="q9d">slapcat</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 10 -->
+            <div class="question">
+                <div class="question-text">10. ¿Cuál de los siguientes comandos se usa para añadir una entrada al directorio LDAP?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q10" value="a" id="q10a">
+                        <label for="q10a">ldapsearch</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q10" value="b" id="q10b">
+                        <label for="q10b">ldapdelete</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q10" value="c" id="q10c">
+                        <label for="q10c">ldapadd</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q10" value="d" id="q10d">
+                        <label for="q10d">ldapmodify</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 11 -->
+            <div class="question">
+                <div class="question-text">11. ¿Qué archivo de configuración principal usa OpenLDAP en Ubuntu Server?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q11" value="a" id="q11a">
+                        <label for="q11a">/etc/ldap/slapd.conf</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q11" value="b" id="q11b">
+                        <label for="q11b">/etc/ldap.conf</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q11" value="c" id="q11c">
+                        <label for="q11c">/var/lib/ldap/config.ldif</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q11" value="d" id="q11d">
+                        <label for="q11d">/etc/openldap/ldap.conf</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 12 -->
+            <div class="question">
+                <div class="question-text">12. ¿Qué comando permite verificar si el servicio OpenLDAP está activo en Ubuntu Server?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q12" value="a" id="q12a">
+                        <label for="q12a">service ldapd status</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q12" value="b" id="q12b">
+                        <label for="q12b">systemctl check ldap</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q12" value="c" id="q12c">
+                        <label for="q12c">systemctl status slapd</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q12" value="d" id="q12d">
+                        <label for="q12d">ldapstatus</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 13 -->
+            <div class="question">
+                <div class="question-text">13. ¿Cuál es el propósito principal de un archivo LDIF en OpenLDAP?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q13" value="a" id="q13a">
+                        <label for="q13a">Configurar la autenticación de usuarios en Ubuntu</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q13" value="b" id="q13b">
+                        <label for="q13b">Guardar logs del servidor LDAP</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q13" value="c" id="q13c">
+                        <label for="q13c">Definir entradas y modificaciones en el directorio LDAP</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q13" value="d" id="q13d">
+                        <label for="q13d">Realizar copias de seguridad de la base de datos</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 14 -->
+            <div class="question">
+                <div class="question-text">14. ¿Qué hace el siguiente comando?<br><code>ldapsearch -x -LLL -b "dc=ejemplo,dc=com"</code></div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q14" value="a" id="q14a">
+                        <label for="q14a">Elimina el directorio ejemplo.com</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q14" value="b" id="q14b">
+                        <label for="q14b">Busca todas las entradas dentro del dominio ejemplo.com</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q14" value="c" id="q14c">
+                        <label for="q14c">Crea un nuevo usuario en ejemplo.com</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q14" value="d" id="q14d">
+                        <label for="q14d">Modifica las entradas en ejemplo.com</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 15 -->
+            <div class="question">
+                <div class="question-text">15. ¿Qué ocurre si ejecuto "sudo nano archivo.conf" y dicho archivo no existe?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q15" value="a" id="q15a">
+                        <label for="q15a">Se produce un error y no se puede continuar</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q15" value="b" id="q15b">
+                        <label for="q15b">Se crea automáticamente un archivo vacío</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q15" value="c" id="q15c">
+                        <label for="q15c">Se abre nano pero no se puede guardar</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q15" value="d" id="q15d">
+                        <label for="q15d">Se solicita confirmación antes de crear el archivo</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 16 -->
+            <div class="question">
+                <div class="question-text">16. En el acrónimo LAM (relacionado con servidores), ¿qué representa la letra "M"?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q16" value="a" id="q16a">
+                        <label for="q16a">MongoDB</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q16" value="b" id="q16b">
+                        <label for="q16b">MySQL o MariaDB</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q16" value="c" id="q16c">
+                        <label for="q16c">Mail Server</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q16" value="d" id="q16d">
+                        <label for="q16d">Memcached</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 17 -->
+            <div class="question">
+                <div class="question-text">17. ¿Qué atributo NO es válido para crear una unidad organizativa (organizationalUnit) en LDAP?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q17" value="a" id="q17a">
+                        <label for="q17a">ou</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q17" value="b" id="q17b">
+                        <label for="q17b">cn</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q17" value="c" id="q17c">
+                        <label for="q17c">objectClass</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q17" value="d" id="q17d">
+                        <label for="q17d">dn</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 18 -->
+            <div class="question">
+                <div class="question-text">18. Al crear un usuario en LDAP, ¿qué atributo es obligatorio pero a menudo se omite por error?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q18" value="a" id="q18a">
+                        <label for="q18a">mail</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q18" value="b" id="q18b">
+                        <label for="q18b">gidNumber</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q18" value="c" id="q18c">
+                        <label for="q18c">userPassword</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q18" value="d" id="q18d">
+                        <label for="q18d">commonName</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 19 -->
+            <div class="question">
+                <div class="question-text">19. ¿Cuál es la función principal de OpenLDAP en un servidor Linux?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q19" value="a" id="q19a">
+                        <label for="q19a">Servir como base de datos para archivos del sistema</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q19" value="b" id="q19b">
+                        <label for="q19b">Gestionar usuarios y autenticaciones de manera centralizada</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q19" value="c" id="q19c">
+                        <label for="q19c">Actuar como un servidor de correo</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q19" value="d" id="q19d">
+                        <label for="q19d">Controlar los permisos de archivos y directorios</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 20 -->
+            <div class="question">
+                <div class="question-text">20. ¿Cuál es la diferencia principal entre slapadd y ldapadd?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q20" value="a" id="q20a">
+                        <label for="q20a">No hay ninguna diferencia, son alias</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q20" value="b" id="q20b">
+                        <label for="q20b">ldapadd carga datos en servidor activo, slapcat directamente en BD</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q20" value="c" id="q20c">
+                        <label for="q20c">slapadd es para modificar y ldapadd para eliminar</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q20" value="d" id="q20d">
+                        <label for="q20d">slapadd requiere permisos de root, ldapadd no</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 21 -->
+            <div class="question">
+                <div class="question-text">21. ¿Qué protocolo utiliza OpenLDAP para la autenticación y consulta de directorios?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q21" value="a" id="q21a">
+                        <label for="q21a">SSH</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q21" value="b" id="q21b">
+                        <label for="q21b">FTP</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q21" value="c" id="q21c">
+                        <label for="q21c">LDAP</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q21" value="d" id="q21d">
+                        <label for="q21d">HTTP</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 22 -->
+            <div class="question">
+                <div class="question-text">22. ¿Cuál de las siguientes es un DN (Distinguished Name) válido en LDAP?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q22" value="a" id="q22a">
+                        <label for="q22a">dc=ejemplo,com,ou=Usuarios</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q22" value="b" id="q22b">
+                        <label for="q22b">cn=Grupos,dc=ejemplo</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q22" value="c" id="q22c">
+                        <label for="q22c">uid=jperez,ou=Usuarios,dc=ejemplo,dc=com</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q22" value="d" id="q22d">
+                        <label for="q22d">ou=Usuarios,cn=Administradores,dc=com</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 23 -->
+            <div class="question">
+                <div class="question-text">23. ¿Qué hace el siguiente comando?<br><code>ldapmodify -x -D "cn=admin,dc=ejemplo,dc=com" -W -f cambios.ldif</code></div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q23" value="a" id="q23a">
+                        <label for="q23a">Busca una entrada específica en OpenLDAP</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q23" value="b" id="q23b">
+                        <label for="q23b">Elimina una entrada de OpenLDAP</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q23" value="c" id="q23c">
+                        <label for="q23c">Modifica entradas existentes usando el archivo cambios.ldif</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q23" value="d" id="q23d">
+                        <label for="q23d">Añade nuevos usuarios a OpenLDAP</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 24 -->
+            <div class="question">
+                <div class="question-text">24. ¿Cuál es la diferencia principal entre ldapsearch y slapcat?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q24" value="a" id="q24a">
+                        <label for="q24a">ldapsearch requiere servidor activo, slapcat accede directo a BD</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q24" value="b" id="q24b">
+                        <label for="q24b">slapcat solo funciona con SSL activado</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q24" value="c" id="q24c">
+                        <label for="q24c">ldapsearch es más lento pero más seguro</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q24" value="d" id="q24d">
+                        <label for="q24d">No hay diferencia, son sinónimos</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 25 -->
+            <div class="question">
+                <div class="question-text">25. ¿Cuál es la diferencia en la gestión de permisos entre chown y chgrp?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q25" value="a" id="q25a">
+                        <label for="q25a">chgrp cambia el propietario, chown el grupo</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q25" value="b" id="q25b">
+                        <label for="q25b">Ambos hacen lo mismo, solo difieren en sintaxis</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q25" value="c" id="q25c">
+                        <label for="q25c">chown cambia propietario, chgrp cambia grupo</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q25" value="d" id="q25d">
+                        <label for="q25d">chown solo funciona con directorios</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 26 -->
+            <div class="question">
+                <div class="question-text">26. ¿Qué significan las letras "r", "w" y "x" en la gestión de permisos de Linux?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q26" value="a" id="q26a">
+                        <label for="q26a">root, write, extract</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q26" value="b" id="q26b">
+                        <label for="q26b">read, write, execute</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q26" value="c" id="q26c">
+                        <label for="q26c">recursive, writable, executable</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q26" value="d" id="q26d">
+                        <label for="q26d">read, writable, export</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 27 -->
+            <div class="question">
+                <div class="question-text">27. ¿A qué equivale el permiso numérico 744 en notación simbólica?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q27" value="a" id="q27a">
+                        <label for="q27a">rwx rw- rw-</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q27" value="b" id="q27b">
+                        <label for="q27b">rwx r-x r-x</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q27" value="c" id="q27c">
+                        <label for="q27c">rwx r-- r--</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q27" value="d" id="q27d">
+                        <label for="q27d">rwx -w- -w-</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 28 -->
+            <div class="question">
+                <div class="question-text">28. ¿Cómo se muestran los permisos 770 al ejecutar ls -l?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q28" value="a" id="q28a">
+                        <label for="q28a">rwxrwx---</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q28" value="b" id="q28b">
+                        <label for="q28b">rwxr-xr-x</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q28" value="c" id="q28c">
+                        <label for="q28c">rw-rw----</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q28" value="d" id="q28d">
+                        <label for="q28d">rwxrw-rw-</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 29 -->
+            <div class="question">
+                <div class="question-text">29. Si tengo un directorio con permisos 700 y un archivo dentro con permisos 710, ¿el propietario del archivo puede ejecutarlo?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q29" value="a" id="q29a">
+                        <label for="q29a">No, porque el directorio tiene permisos restrictivos</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q29" value="b" id="q29b">
+                        <label for="q29b">Sí, si el propietario tiene permisos de ejecución</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q29" value="c" id="q29c">
+                        <label for="q29c">Solo si es root</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q29" value="d" id="q29d">
+                        <label for="q29d">Depende del grupo al que pertenezca</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 30 -->
+            <div class="question">
+                <div class="question-text">30. ¿Para qué se usa el archivo /etc/ldap/ldap.conf en un cliente LDAP?</div>
+                <div class="options">
+                    <div class="option">
+                        <input type="radio" name="q30" value="a" id="q30a">
+                        <label for="q30a">Para configurar el servidor LDAP</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q30" value="b" id="q30b">
+                        <label for="q30b">Para almacenar las credenciales de usuario</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q30" value="c" id="q30c">
+                        <label for="q30c">Para configurar cómo el cliente se conecta al servidor</label>
+                    </div>
+                    <div class="option">
+                        <input type="radio" name="q30" value="d" id="q30d">
+                        <label for="q30d">Para definir las políticas de seguridad</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 31 - TEXTO -->
+            <div class="question">
+                <div class="question-text">31. ¿Qué comando puedes utilizar para cambiar el grupo de un fichero o directorio?</div>
+                <input type="text" id="q31" class="text-input" placeholder="Escribe tu respuesta aquí...">
+                <div id="q31_feedback" class="feedback"></div>
+            </div>
+
+            <!-- Pregunta 32 - TEXTO -->
+            <div class="question">
+                <div class="question-text">32. ¿Cómo se muestran los permisos 770 al ejecutar ls -l? (Escribe en formato: rwxrwx---)</div>
+                <input type="text" id="q32" class="text-input" placeholder="Ejemplo: rwxr-xr-x">
+                <div id="q32_feedback" class="feedback"></div>
+            </div>
+
+            <!-- Pregunta 33 - TEXTO -->
+            <div class="question">
+                <div class="question-text">33. ¿Cómo se muestran los permisos 644 al ejecutar ls -l? (Escribe en formato: rw-r--r--)</div>
+                <input type="text" id="q33" class="text-input" placeholder="Ejemplo: rwxr-xr-x">
+                <div id="q33_feedback" class="feedback"></div>
+            </div>
+
+            <!-- Pregunta 34 - TEXTO -->
+            <div class="question">
+                <div class="question-text">34. ¿Cómo se muestran los permisos 622 al ejecutar ls -l? (Escribe en formato: rw--w--w-)</div>
+                <input type="text" id="q34" class="text-input" placeholder="Ejemplo: rwxr-xr-x">
+                <div id="q34_feedback" class="feedback"></div>
+            </div>
+
+            <button type="submit" class="submit-btn">📊 Evaluar Cuestionario</button>
+        </form>
+
+        <div id="result" class="result">
+            <h2 id="scoreTitle">Resultado</h2>
+            <p id="scoreText"></p>
+        </div>
+    </div>
+
+    <script>
+        const answers = {
+            q1: 'a', q2: 'b', q3: 'a', q4: 'b', q5: 'd',
+            q6: 'b', q7: 'b', q8: 'd', q9: 'c', q10: 'c',
+            q11: 'a', q12: 'c', q13: 'c', q14: 'b', q15: 'b',
+            q16: 'b', q17: 'b', q18: 'c', q19: 'b', q20: 'b',
+            q21: 'c', q22: 'c', q23: 'c', q24: 'a', q25: 'c',
+            q26: 'b', q27: 'c', q28: 'a', q29: 'b', q30: 'c'
+        };
+
+        // Respuestas para preguntas de texto
+        const textAnswers = {
+            q31: ['chgrp'],
+            q32: ['770', 'rwxrwx---', 'rwx rwx ---'],
+            q33: ['644', 'rw-r--r--', 'rw- r-- r--'],
+            q34: ['622', 'rw--w--w-', 'rw- -w- -w-']
+        };
+
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let score = 0;
+            let totalQuestions = Object.keys(answers).length + Object.keys(textAnswers).length;
+            
+            // Evaluar preguntas de opción múltiple
+            for (let [question, correctAnswer] of Object.entries(answers)) {
+                const userAnswer = document.querySelector(`input[name="${question}"]:checked`);
+                const options = document.querySelectorAll(`input[name="${question}"]`);
+                
+                options.forEach(option => {
+                    const parentDiv = option.closest('.option');
+                    parentDiv.classList.remove('correct', 'incorrect', 'correct-answer');
+                    
+                    if (userAnswer && option === userAnswer) {
+                        if (option.value === correctAnswer) {
+                            parentDiv.classList.add('correct');
+                            score++;
+                        } else {
+                            parentDiv.classList.add('incorrect');
+                        }
+                    }
+                    
+                    if (option.value === correctAnswer && (!userAnswer || userAnswer.value !== correctAnswer)) {
+                        parentDiv.classList.add('correct-answer');
+                    }
+                });
+            }
+
+            // Evaluar preguntas de texto
+            for (let [question, possibleAnswers] of Object.entries(textAnswers)) {
+                const userAnswer = document.getElementById(question);
+                const feedbackDiv = document.getElementById(question + '_feedback');
+                
+                if (userAnswer && feedbackDiv) {
+                    const userValue = userAnswer.value.trim().toLowerCase();
+                    let isCorrect = false;
+                    
+                    // Verificar si la respuesta coincide con alguna de las posibles
+                    for (let correct of possibleAnswers) {
+                        if (userValue === correct.toLowerCase() || 
+                            userValue.replace(/\s+/g, '') === correct.replace(/\s+/g, '').toLowerCase()) {
+                            isCorrect = true;
+                            break;
+                        }
+                    }
+                    
+                    if (isCorrect) {
+                        userAnswer.style.borderColor = '#28a745';
+                        userAnswer.style.backgroundColor = '#d4edda';
+                        feedbackDiv.textContent = '✓ Correcto';
+                        feedbackDiv.style.color = '#28a745';
+                        score++;
+                    } else {
+                        userAnswer.style.borderColor = '#dc3545';
+                        userAnswer.style.backgroundColor = '#f8d7da';
+                        feedbackDiv.textContent = '✗ Respuesta correcta: ' + possibleAnswers[0];
+                        feedbackDiv.style.color = '#dc3545';
+                    }
+                    feedbackDiv.style.display = 'block';
+                }
+            }
+            
+            // Mostrar resultado
+            const percentage = (score / totalQuestions * 100).toFixed(1);
+            const resultDiv = document.getElementById('result');
+            const scoreText = document.getElementById('scoreText');
+            const scoreTitle = document.getElementById('scoreTitle');
+            
+            let scoreClass = '';
+            let message = '';
+            
+            if (percentage >= 90) {
+                scoreClass = 'score-excellent';
+                message = '¡Excelente! 🎉';
+            } else if (percentage >= 70) {
+                scoreClass = 'score-good';
+                message = '¡Muy bien! 👏';
+            } else if (percentage >= 50) {
+                scoreClass = 'score-fair';
+                message = 'Bien, pero puedes mejorar 📚';
+            } else {
+                scoreClass = 'score-poor';
+                message = 'Necesitas estudiar más 📖';
+            }
+            
+            scoreTitle.textContent = message;
+            scoreTitle.className = scoreClass;
+            scoreText.innerHTML = `Has obtenido <strong>${score}</strong> de <strong>${totalQuestions}</strong> preguntas correctas<br>Porcentaje: <strong>${percentage}%</strong>`;
+            
+            resultDiv.classList.add('show');
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+    </script>
+</body>
+</html>
